@@ -15,10 +15,6 @@ from fastapi import FastAPI
 import pdf
 import inspect
 
-@app.get("/debug/pdf-functions")
-async def debug_pdf_functions():
-    functions = [name for name, obj in inspect.getmembers(pdf, inspect.isfunction)]
-    return {"pdf_functions": functions}
 
 from embeddings_engine import (
     create_gemini_search_engine,
@@ -36,6 +32,10 @@ load_dotenv()
 # Initialize FastAPI
 app = FastAPI()
 
+@app.get("/debug/pdf-functions")
+async def debug_pdf_functions():
+    functions = [name for name, obj in inspect.getmembers(pdf, inspect.isfunction)]
+    return {"pdf_functions": functions}
 # Load Gemini API key
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
@@ -251,6 +251,7 @@ async def run_submission(req: RunRequest, token: str = Depends(verify_token)):
 @app.get("/health")
 async def health():
     return {"status": "ok", "embedding_model": "Gemini", "engine": "FAISS"}
+
 
 
 
