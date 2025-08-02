@@ -10,12 +10,8 @@ import google.generativeai as genai
 
 INDEX_PATH = "index/faiss.index"
 CLAUSES_PATH = "index/clauses.pkl"
-from document_utils import (
-    download_file,
-    extract_text_from_pdf_url,
-    extract_text_from_docx_file,
-    extract_text_from_eml_file,
-)
+from pdf import extract_text_from_eml_file, extract_text_from_docx_file, extract_text_from_pdf_url, download_file
+
 
 from embeddings_engine import (
     create_gemini_search_engine,
@@ -248,4 +244,5 @@ async def run_submission(req: RunRequest, token: str = Depends(verify_token)):
 @app.get("/health")
 async def health():
     return {"status": "ok", "embedding_model": "Gemini", "engine": "FAISS"}
+
 
