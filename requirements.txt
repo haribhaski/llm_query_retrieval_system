@@ -1,4 +1,4 @@
-fastapi
+ilfastapi
 uvicorn
 google-generativeai
 python-dotenv
@@ -9,5 +9,5 @@ nltk
 python-multipart
 PyMuPDF
 python-docx
-mailparser
+email
 
