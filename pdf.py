@@ -97,7 +97,7 @@ def extract_text_from_docx_file(file_path: str) -> str:
     """
     try:
         logger.info(f"Extracting text from DOCX: {file_path}")
-        doc = DocxDocument(file_path)
+        doc = Document(file_path)
         text = "\n".join([para.text for para in doc.paragraphs if para.text.strip()])
         if not text.strip():
             logger.warning(f"No text extracted from {file_path}")
@@ -136,3 +136,4 @@ def extract_text_from_eml_file(file_path: str) -> str:
     except Exception as e:
         logger.error(f"EML extraction failed for {file_path}: {str(e)}")
         raise Exception(f"EML extraction failed: {str(e)}")
+
