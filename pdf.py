@@ -2,7 +2,9 @@ import requests
 import os
 import fitz  # PyMuPDF for PDF parsing
 from docx import Document
-import mailparser
+import email
+from email import policy
+from email.parser import BytesParser
 from typing import Optional
 import logging
 
@@ -105,28 +107,4 @@ def extract_text_from_docx_file(file_path: str) -> str:
         logger.error(f"DOCX extraction failed for {file_path}: {str(e)}")
         raise Exception(f"DOCX extraction failed: {str(e)}")
 
-def extract_text_from_eml_file(file_path: str) -> str:
-    """
-    Extract text from an EML (email) file.
-    
-    Args:
-        file_path: Path to the EML file.
-        
-    Returns:
-        Extracted text as a string.
-        
-    Raises:
-        Exception: If EML parsing fails.
-    """
-    try:
-        logger.info(f"Extracting text from EML: {file_path}")
-        mail = mailparser.parse_from_file(file_path)
-        text = mail.text_plain or mail.text_html or ""
-        if not text.strip():
-            logger.warning(f"No text extracted from {file_path}")
-        return text.strip()
-    
-    except Exception as e:
-        logger.error(f"EML extraction failed for {file_path}: {str(e)}")
 
-        raise Exception(f"EML extraction failed: {str(e)}")
