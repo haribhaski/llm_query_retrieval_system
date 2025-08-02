@@ -1,7 +1,7 @@
 import requests
 import os
 import fitz  # PyMuPDF for PDF parsing
-from docx import Document as DocxDocument
+from docx import Document
 import mailparser
 from typing import Optional
 import logging
@@ -128,4 +128,5 @@ def extract_text_from_eml_file(file_path: str) -> str:
     
     except Exception as e:
         logger.error(f"EML extraction failed for {file_path}: {str(e)}")
+
         raise Exception(f"EML extraction failed: {str(e)}")
