@@ -10,4 +10,6 @@ python-multipart
 PyMuPDF
 python-docx
 email
+setuptools
+
 
