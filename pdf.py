@@ -139,3 +139,4 @@ def extract_text_from_docx_file(file_path: str) -> str:
         raise Exception(f"DOCX extraction failed: {str(e)}")
 
 
+
