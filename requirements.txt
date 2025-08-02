@@ -11,4 +11,3 @@ nltk
 python-multipart
 PyMuPDF
 python-docx
-email
