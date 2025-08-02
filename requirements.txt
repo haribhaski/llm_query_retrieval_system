@@ -1,3 +1,4 @@
+setuptools
 fastapi
 uvicorn
 google-generativeai
@@ -10,6 +11,3 @@ python-multipart
 PyMuPDF
 python-docx
 email
-setuptools
-
-
