@@ -54,6 +54,37 @@ def download_file(url: str) -> str:
         logger.error(f"Failed to download {url}: {str(e)}")
         raise Exception(f"Download failed: {str(e)}")
 
+
+def extract_text_from_eml_file(file_path: str) -> str:
+    import email
+    from email import policy
+    from email.parser import BytesParser
+    import logging
+
+    logger = logging.getLogger(__name__)
+    try:
+        logger.info(f"Extracting text from EML: {file_path}")
+        with open(file_path, "rb") as f:
+            msg = BytesParser(policy=policy.default).parse(f)
+        if msg.is_multipart():
+            parts = [part for part in msg.walk() if part.get_content_type() == "text/plain"]
+            text_parts = []
+            for part in parts:
+                payload = part.get_payload(decode=True)
+                if payload:
+                    text_parts.append(payload.decode(errors="ignore"))
+            text = "\n".join(text_parts)
+        else:
+            payload = msg.get_payload(decode=True)
+            text = payload.decode(errors="ignore") if payload else ""
+        if not text.strip():
+            logger.warning(f"No text extracted from EML: {file_path}")
+        return text.strip()
+    except Exception as e:
+        logger.error(f"EML extraction failed for {file_path}: {str(e)}")
+        raise Exception(f"EML extraction failed: {str(e)}")
+
+
 def extract_text_from_pdf_url(file_path: str) -> str:
     """
     Extract text from a PDF file.
@@ -107,33 +138,4 @@ def extract_text_from_docx_file(file_path: str) -> str:
         logger.error(f"DOCX extraction failed for {file_path}: {str(e)}")
         raise Exception(f"DOCX extraction failed: {str(e)}")
 
-
-def extract_text_from_eml_file(file_path: str) -> str:
-    import email
-    from email import policy
-    from email.parser import BytesParser
-    import logging
-
-    logger = logging.getLogger(__name__)
-    try:
-        logger.info(f"Extracting text from EML: {file_path}")
-        with open(file_path, "rb") as f:
-            msg = BytesParser(policy=policy.default).parse(f)
-        if msg.is_multipart():
-            parts = [part for part in msg.walk() if part.get_content_type() == "text/plain"]
-            text_parts = []
-            for part in parts:
-                payload = part.get_payload(decode=True)
-                if payload:
-                    text_parts.append(payload.decode(errors="ignore"))
-            text = "\n".join(text_parts)
-        else:
-            payload = msg.get_payload(decode=True)
-            text = payload.decode(errors="ignore") if payload else ""
-        if not text.strip():
-            logger.warning(f"No text extracted from EML: {file_path}")
-        return text.strip()
-    except Exception as e:
-        logger.error(f"EML extraction failed for {file_path}: {str(e)}")
-        raise Exception(f"EML extraction failed: {str(e)}")
 
