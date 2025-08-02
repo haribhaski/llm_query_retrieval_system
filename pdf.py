@@ -107,4 +107,43 @@ def extract_text_from_docx_file(file_path: str) -> str:
         logger.error(f"DOCX extraction failed for {file_path}: {str(e)}")
         raise Exception(f"DOCX extraction failed: {str(e)}")
 
+def extract_text_from_eml_file(file_path: str) -> str:
+    """
+    Extract plain text from an EML (email) file.
+    
+    Args:
+        file_path: Path to the EML file.
+        
+    Returns:
+        Extracted plain text content of the email.
+        
+    Raises:
+        Exception: If email parsing fails.
+    """
+    try:
+        logger.info(f"Extracting text from EML: {file_path}")
+        with open(file_path, "rb") as f:
+            msg = BytesParser(policy=policy.default).parse(f)
+        
+        # If multipart, concatenate all text/plain parts
+        if msg.is_multipart():
+            parts = [part for part in msg.walk() if part.get_content_type() == "text/plain"]
+            text_parts = []
+            for part in parts:
+                payload = part.get_payload(decode=True)
+                if payload:
+                    text_parts.append(payload.decode(errors="ignore"))
+            text = "\n".join(text_parts)
+        else:
+            payload = msg.get_payload(decode=True)
+            text = payload.decode(errors="ignore") if payload else ""
+        
+        if not text.strip():
+            logger.warning(f"No text extracted from EML: {file_path}")
+        return text.strip()
+    
+    except Exception as e:
+        logger.error(f"EML extraction failed for {file_path}: {str(e)}")
+        raise Exception(f"EML extraction failed: {str(e)}")
+
 
